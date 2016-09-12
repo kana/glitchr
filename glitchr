@@ -1,14 +1,14 @@
 #!/bin/bash
 
-size()
+file-size()
 {
   wc -c "$1" | cut -d' ' -f1
 }
 
-safe()
+has-enough-complexity()
 {
-  insize="$(size "$2")"
-  outsize="$(size "$3")"
+  insize="$(file-size "$2")"
+  outsize="$(file-size "$3")"
   return $(($1 == 0 && outsize >= insize * 90 / 100))
 }
 
@@ -30,7 +30,7 @@ do
   infile="${1/./-$i.}"
   outfile="${1/./-$j.}"
   ./complex-glitch "$infile" "$outfile"
-  if safe "$?" "$origfile" "$outfile"
+  if has-enough-complexity "$?" "$origfile" "$outfile"
   then
     redo="$((redo + 1))"
     echo "-------- redo $redo"
