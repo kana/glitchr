@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+
+MIN_RANDOMNESS = 0
+MAX_RANDOMNESS = 100000
+
+def main(args)
+  if args.length < 2
+    fail 'Usage: glitch.rb INFILE RANDOMNESS >OUTFILE'
+  end
+
+  infile = args[0]
+  randomness = args[1].to_i
+
+  unless MIN_RANDOMNESS <= randomness and randomness <= MAX_RANDOMNESS
+    fail "RANDOMNESS must be between #{MIN_RANDOMNESS} and #{MAX_RANDOMNESS}."
+  end
+
+  File.open(args[0], mode='rb').each_byte do |byte|
+    r = rand(MAX_RANDOMNESS)
+    if r < randomness
+      STDOUT.putc rand(256)
+    else
+      STDOUT.putc byte
+    end
+  end
+end
+
+main(ARGV)
