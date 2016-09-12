@@ -16,8 +16,10 @@ select-random-texture()
   printf 'texture/%02d.jpg' $((1 + RANDOM % 10))
 }
 
-convert \
-  <(convert <(./simple-glitch "$1" 5) -rotate 90 -quality 100 - 2>/dev/null) \
-  "$(select-random-texture)" -resize "$(identify "$1" | cut -d' ' -f3)!" \
-  -compose screen -composite \
-  -quality 100 "$2" 2>/dev/null
+# convert \
+#   <(convert <(./simple-glitch "$1" 5) -rotate 90 -quality 100 - 2>/dev/null) \
+#   "$(select-random-texture)" -resize "$(identify "$1" | cut -d' ' -f3)!" \
+#   -compose screen -composite \
+#   -quality 100 "$2" 2>/dev/null
+
+convert <(./simple-glitch "$1" 5) -rotate 90 -quality 100 "$2" 2>/dev/null
