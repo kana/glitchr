@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if [ "$#" -lt 2 ]
+then
+  echo "Usage: $0 INFILE OUTFILE"
+  exit 1
+fi
+
+select-random-alpha()
+{
+  echo $((30 + RANDOM % 70))
+}
+
+select-random-texture()
+{
+  printf 'texture/%02d.jpg' $((1 + RANDOM % 5))
+}
+
+composite \
+  <(convert <(./simple-glitch "$1" 5) -rotate 90 -quality 100 - 2>/dev/null) \
+  "$(select-random-texture)" -resize "$(identify "$1" | cut -d' ' -f3)!" \
+  -blend "$(select-random-alpha)" \
+  -quality 100 "$2" 2>/dev/null
