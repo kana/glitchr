@@ -15,13 +15,18 @@ def main(args)
     fail "RANDOMNESS must be between #{MIN_RANDOMNESS} and #{MAX_RANDOMNESS}."
   end
 
+  ignore_first_n_bytes = 32  # Do not break the header.
   File.open(args[0], mode='rb').each_byte do |byte|
     r = rand(MAX_RANDOMNESS)
-    if r < randomness
-      STDOUT.putc rand(256)
+    if 0 < ignore_first_n_bytes
+      ignore_first_n_bytes -= 1
     else
-      STDOUT.putc byte
+      if r < randomness
+        byte = rand(256)
+      end
     end
+
+    STDOUT.putc byte
   end
 end
 
