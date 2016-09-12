@@ -30,7 +30,7 @@ do
   infile="${1/./-$i.}"
   outfile="${1/./-$j.}"
   ./complex-glitch "$infile" "$outfile"
-  if has-enough-complexity "$?" "$origfile" "$outfile"
+  if has-enough-complexity "$?" "$infile" "$outfile"
   then
     redo="$((redo + 1))"
     echo "-------- redo $redo"
