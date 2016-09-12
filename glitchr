@@ -9,7 +9,7 @@ has-enough-complexity()
 {
   insize="$(file-size "$2")"
   outsize="$(file-size "$3")"
-  return $(($1 == 0 && outsize >= insize * 90 / 100))
+  return $(($1 == 0 && outsize >= insize * 97 / 100))
 }
 
 if [ "$#" -lt 2 ]
