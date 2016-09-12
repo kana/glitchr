@@ -1,0 +1,42 @@
+#!/bin/bash
+
+size()
+{
+  wc -c "$1" | cut -d' ' -f1
+}
+
+safe()
+{
+  insize="$(size "$2")"
+  outsize="$(size "$3")"
+  return $(($1 == 0 && outsize >= insize * 90 / 100))
+}
+
+if [ "$#" -lt 2 ]
+then
+  echo "Usage: $0 INFILE MAX_ITER"
+  exit 1
+fi
+
+cp "$1" "${1/./-0.}"
+
+i=0
+redo=0
+echo "======== Iter $i"
+while [ "$i" -lt "$2" ]
+do
+  j=$((i + 1))
+  origfile="$1"
+  infile="${1/./-$i.}"
+  outfile="${1/./-$j.}"
+  ./complex-glitch "$infile" "$outfile"
+  if safe "$?" "$origfile" "$outfile"
+  then
+    redo="$((redo + 1))"
+    echo "-------- redo $redo"
+    continue
+  fi
+  i="$j"
+  redo=0
+  echo "======== Iter $i"
+done
